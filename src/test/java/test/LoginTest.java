@@ -1,6 +1,6 @@
 package test;
 
-import configDriver.BrowserMode;
+import configDriver.ConfigReader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
@@ -12,19 +12,25 @@ public class LoginTest extends BaseTest {
 
     private static final Logger logger = LogManager.getLogger(LoginTest.class);
 
-    public LoginTest() {
-        browserMode = BrowserMode.KIOSK;
-    }
+    private static final String USERNAME = ConfigReader.getUsername();
+    private static final String PASSWORD = ConfigReader.getPassword();
 
     @Test
     void testLogin() {
-        logger.info("Вход в режиме kiosk");
+        logger.info("=== Тест: вход в систему ===");
+        logger.info("Используем пользователя: {}", USERNAME);
 
         LoginPage page = new LoginPage(driver);
         page.openLoginPage();
-        page.login("Андрей", "qwerty123");
+
+        logger.info("Выполняю вход...");
+        page.login(USERNAME, PASSWORD);
 
         String url = driver.getCurrentUrl();
-        assertTrue(url.contains("wishlist"));
+        logger.info("Текущий URL: {}", url);
+        assertTrue(url.contains("wishlist"),
+                "Ожидался редирект на страницу списков желаний, но URL: " + url);
+
+        logger.info("=== Тест входа пройден успешно ===");
     }
 }

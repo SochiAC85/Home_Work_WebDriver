@@ -1,6 +1,5 @@
 package test;
 
-import configDriver.BrowserMode;
 import configDriver.WebDriveFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,12 +12,12 @@ public abstract class BaseTest {
     private static final Logger logger = LogManager.getLogger(BaseTest.class);
 
     protected WebDriver driver;
-    protected BrowserMode browserMode;
+    private final String browserName = System.getProperty("browser", "chrome");
 
     @BeforeEach
     void setUp() {
-        logger.info("Старт теста, режим: {}", browserMode);
-        driver = new WebDriveFactory().create(browserMode);
+        logger.info("Старт теста, браузер: {}", browserName);
+        driver = WebDriveFactory.createNewDriver(browserName);
     }
 
     @AfterEach

@@ -1,6 +1,6 @@
 package test;
 
-import configDriver.BrowserMode;
+import configDriver.ConfigReader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
@@ -12,19 +12,27 @@ public class RegistrationTest extends BaseTest {
 
     private static final Logger logger = LogManager.getLogger(RegistrationTest.class);
 
-    public RegistrationTest() {
-        browserMode = BrowserMode.HEADLESS;
-    }
+    private static final String USERNAME = ConfigReader.getUsername();
+    private static final String PASSWORD = ConfigReader.getPassword();
+    private static final String EMAIL = ConfigReader.getEmail();
 
     @Test
     void testRegistration() {
-        logger.info("Регистрация в режиме headless");
+        logger.info("=== Тест: регистрация и вход ===");
+        logger.info("Используем данные: user={}, email={}", USERNAME, EMAIL);
 
         LoginPage page = new LoginPage(driver);
         page.openRegisterPage();
-        page.register("Андрей", "sochiac@gmail.com", "qwerty123");
 
+        logger.info("Заполняю форму регистрации...");
+
+        page.register(USERNAME, PASSWORD, EMAIL);
+
+        logger.info("Проверяю редирект после регистрации...");
         String url = driver.getCurrentUrl();
-        assertTrue(url.contains("wishlist") || url.contains("login"));
+        assertTrue(url.contains("wishlist"),
+                "Ожидался редирект на страницу списков желаний после регистрации, но URL: " + url);
+
+        logger.info("=== Тест регистрации пройден успешно ===");
     }
 }
