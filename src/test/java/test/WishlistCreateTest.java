@@ -1,6 +1,5 @@
 package test;
 
-import configDriver.ConfigReader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
@@ -13,21 +12,19 @@ public class WishlistCreateTest extends BaseTest {
 
     private static final Logger logger = LogManager.getLogger(WishlistCreateTest.class);
 
-    private static final String USERNAME = ConfigReader.getUsername();
-    private static final String PASSWORD = ConfigReader.getPassword();
     private static final String LIST_NAME = "Тест Желания3";
 
     @Test
     void testCreateWishlist() {
         logger.info("=== Тест: создание списка желаний ===");
-        logger.info("Используем пользователя: {}", USERNAME);
+        logger.info("Используем пользователя: {}", username);
 
         LoginPage loginPage = new LoginPage(driver);
         loginPage.openLoginPage();
 
         logger.info("Выполняю вход...");
 
-        loginPage.login(USERNAME, PASSWORD);
+        loginPage.login(username, password);
 
         String currentUrl = driver.getCurrentUrl();
         assertTrue(currentUrl.contains("wishlist"),

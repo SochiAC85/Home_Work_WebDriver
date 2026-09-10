@@ -12,10 +12,23 @@ public abstract class BaseTest {
     private static final Logger logger = LogManager.getLogger(BaseTest.class);
 
     protected WebDriver driver;
+    protected String username;
+    protected String password;
     private final String browserName = System.getProperty("browser", "chrome");
 
     @BeforeEach
     void setUp() {
+        username = System.getProperty("username");
+        password = System.getProperty("password");
+
+        if (username == null || username.isBlank()){
+            throw new IllegalStateException("Требуется -Dusername");
+        }
+
+        if (password == null || password.isBlank()){
+            throw new IllegalStateException("Требуется -Dpassword");
+        }
+
         logger.info("Старт теста, браузер: {}", browserName);
         driver = WebDriveFactory.createNewDriver(browserName);
     }
